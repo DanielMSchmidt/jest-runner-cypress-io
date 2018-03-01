@@ -19,7 +19,7 @@ const getContext = () => {
 
   const CypressController = td.replace(
     "./helpers/cypressController",
-    td.constructor(["start"])
+    td.constructor(require("./helpers/cypressController"))
   );
 
   const run = require("./run");
