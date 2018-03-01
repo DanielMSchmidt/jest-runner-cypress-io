@@ -8,8 +8,20 @@ module.exports = ({
 }) => {
   const start = +new Date();
   const cypress = new CypressController({ binaryPath: cypressPath, options });
-  cypress.start(testPath);
-
+  const results = cypress.start(testPath);
   const end = +new Date();
-  pass({ start, end, test: { path: testPath } });
+  const reportTest = (reporter, name, message) =>
+    reporter({
+      start,
+      end,
+      test: { path: testPath, displayName: name, failureMessage: message }
+    });
+
+  if (!Object.keys(results).length) {
+    reportTest(pass);
+  } else {
+    Object.entries(results).map(([name, errorMessage]) => {
+      reportTest(fail, name, errorMessage);
+    });
+  }
 };

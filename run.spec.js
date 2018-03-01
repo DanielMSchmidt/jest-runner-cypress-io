@@ -30,21 +30,76 @@ const getContext = () => {
 test("it starts cypress in a sub-process", () => {
   const { CypressController, getLocalCypressFile, pass, run } = getContext();
   const testPath = "actualTest";
+  td
+    .when(CypressController.prototype.start(td.matchers.anything()))
+    .thenReturn([]);
 
   run({ testPath, config: {} });
 
   td.verify(
     new CypressController({ binaryPath: validCypressPath, options: {} })
   );
-  td.verify(CypressController.prototype.start(testPath));
   td.verify(pass(td.matchers.contains({ test: { path: testPath } })));
 });
 
-test("it only starts one cypress sub-process");
-test("it reports a pass if cypress exits without an error");
-test("it reports a fail if cypress exits with a non-zero exit code");
-test("it reports the failed test case names");
+test("it reports a fail if cypress exits without an error", () => {
+  const { CypressController, getLocalCypressFile, fail, run } = getContext();
+  const testPath = "actualTest";
+  td
+    .when(CypressController.prototype.start(td.matchers.anything()))
+    .thenReturn({
+      "foo should execute bar": "Could not click on .bar",
+      "baz should have been called": "Failed to visit page"
+    });
+
+  run({ testPath, config: {} });
+
+  td.verify(
+    new CypressController({ binaryPath: validCypressPath, options: {} })
+  );
+  td.verify(fail(td.matchers.contains({ test: { path: testPath } })));
+});
+
+test("it reports the failed test case names", () => {
+  const { CypressController, getLocalCypressFile, fail, run } = getContext();
+  const testPath = "actualTest";
+  td
+    .when(CypressController.prototype.start(td.matchers.anything()))
+    .thenReturn({
+      "foo should execute bar": "Could not click on .bar",
+      "baz should have been called": "Failed to visit page"
+    });
+
+  run({ testPath, config: {} });
+
+  td.verify(
+    new CypressController({ binaryPath: validCypressPath, options: {} })
+  );
+  td.verify(
+    fail(
+      td.matchers.contains({
+        test: {
+          path: testPath,
+          displayName: "foo should execute bar",
+          failureMessage: "Could not click on .bar"
+        }
+      })
+    )
+  );
+  td.verify(
+    fail(
+      td.matchers.contains({
+        test: {
+          path: testPath,
+          displayName: "baz should have been called",
+          failureMessage: "Failed to visit page"
+        }
+      })
+    )
+  );
+});
 test("it should cancel the cypress run in case a cancel occurs");
 
 // Unhappy path
+test("it reports a fail if cypress exits with a non-zero exit code");
 test("it throws an error if cypress is not found");
