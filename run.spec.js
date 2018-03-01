@@ -98,6 +98,7 @@ test("it reports the failed test case names", () => {
     )
   );
 });
+
 test("it should cancel the cypress run in case a cancel occurs");
 
 // Unhappy path
