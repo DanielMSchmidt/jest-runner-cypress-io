@@ -26,7 +26,7 @@
     "jest": ">=21.0.0"
   },
   "devDependencies": {
-    "cypress": "^2.1.0",
+    "cypress": "2.1.0",
     "find-up": "2.1.0",
     "jest": "22.4.2",
     "path": "0.12.7",
