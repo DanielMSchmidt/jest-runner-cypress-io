@@ -30,7 +30,7 @@
     "find-up": "2.1.0",
     "jest": "22.4.4",
     "path": "0.12.7",
-    "testdouble": "3.10.0",
+    "testdouble": "3.11.0",
     "testdouble-jest": "1.0.1"
   }
 }
