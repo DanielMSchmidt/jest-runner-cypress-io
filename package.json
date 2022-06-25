@@ -28,7 +28,7 @@
   "devDependencies": {
     "cypress": "4.12.1",
     "find-up": "2.1.0",
-    "jest": "24.9.0",
+    "jest": "26.0.0",
     "path": "0.12.7",
     "testdouble": "3.16.6",
     "testdouble-jest": "1.0.1"
